@@ -24,7 +24,7 @@ struct ContentView: View {
             Spacer ()
             let shape = RoundedRectangle(cornerRadius: 10)
                 shape.fill(Color.red)
-                .frame(width: 150, height: 150)
+                .frame(width: 50, height: 50)
                 .onTapGesture {
                     print("That tickles!")
                 }
@@ -45,7 +45,8 @@ struct CardView: View {
             shape.fill().foregroundColor(.white)
             shape.stroke(lineWidth: 3)
             Text(card.content)
-            //here is where i will need to change from a text to my shape
+            //here is where I will need to change from a text to my shape, I think.
+            //but it probably should still be card.content, or something similar. Just not Text().
                 .font(.footnote)
                 .foregroundColor(Color.green)
         }
