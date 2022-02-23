@@ -9,7 +9,7 @@
 import Foundation
 
 struct GameModel{//}<CardContent> {
-    let cardsArray: Array<Card> //= makeCards()
+    let cardsArray: Array<Card>
     var cardsOnScreen: Array<Card>
     var numberOfCardsOnScreen = 12
     var points: Int = 0
@@ -31,13 +31,11 @@ struct GameModel{//}<CardContent> {
 //    }
     
     struct Card: Identifiable {
-        //actually called MemoryGame.Card. Nesting it clarifies that it is this game's card
         let id: Int
         var isFaceUp = false
         var isMatched = false
         var seenBefore = false
         let content: String//CardContent //use generics (line 11)
-        //required to make it identifiable
         //4 attributes with 3 states each. Try using an enum?
         var color: Color
         var number: Number
