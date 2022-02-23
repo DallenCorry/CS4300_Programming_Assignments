@@ -9,7 +9,7 @@
 import SwiftUI
 
 class SetGame: ObservableObject {
-    //here is where I should set the shapes of my card, with their colors, numbers etc.
+    //here is where I should set the shapes(Content?) of my card, with their colors, numbers etc.
     var model = createModel()
     
     var cards: Array<GameModel.Card> {
