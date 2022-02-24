@@ -5,7 +5,6 @@
 //  Model for Assignment three in CS 4300
 //  Created by Dallen Corry on 2/14/22.
 //
-
 import Foundation
 
 struct GameModel{//}<CardContent> {
@@ -37,21 +36,21 @@ struct GameModel{//}<CardContent> {
         var seenBefore = false
         let content: String//CardContent //use generics (line 11)
         //4 attributes with 3 states each. Try using an enum?
-        var color: Color
+        var color: myColor
         var number: Number
-        var shape: Shape
+        var shape: myShape
         var shading: Shading
         
         init(content: String){//CardContent){
             id = 1
             self.content = content
-            color = Color.Green
+            color = myColor.Green
             number = Number.One
-            shape = Shape.Diamond
+            shape = myShape.Diamond
             shading = Shading.Open
         }
         
-        init(id: Int, content: String/*CardContent*/, color:Color, number: Number, shape:Shape, shading: Shading) {
+        init(id: Int, content: String/*CardContent*/, color:myColor, number: Number, shape:myShape, shading: Shading) {
             self.id = id
             self.content = content
             self.color = color
@@ -61,10 +60,10 @@ struct GameModel{//}<CardContent> {
         }
     }
     
-    enum Color: CaseIterable {
+    enum myColor: CaseIterable {
         case Green
         case Purple
-        case Red
+        case Orange
     }
     
     enum Number: CaseIterable {
@@ -73,16 +72,16 @@ struct GameModel{//}<CardContent> {
         case Three
     }
     
-    enum Shape: CaseIterable {
-        case Squiggle
+    enum myShape: CaseIterable {
+        case Rectangle
         case Diamond
         case Oval
         
-        func allSame (_ arr: [Shape]) {
-            if arr[0] == arr[1] && arr[0] == arr[2] {
-                
-            }
-        }
+//        func allSame (_ arr: [myShape]) {
+//            if arr[0] == arr[1] && arr[0] == arr[2] {
+//
+//            }
+//        }
     }
     
     enum Shading: CaseIterable {
@@ -96,9 +95,9 @@ struct GameModel{//}<CardContent> {
         var cards = [Card]()
         var myId :Int = 0
 //        let myContent: CardContent
-        Color.allCases.forEach({ color in
+        myColor.allCases.forEach({ color in
             Number.allCases.forEach({ number in
-                Shape.allCases.forEach({ shape in
+                myShape.allCases.forEach({ shape in
                     Shading.allCases.forEach({ shading in
                         myId += 1
                         cards.append(Card(id:myId, content: "Card \(myId)", color:color, number: number, shape:shape, shading: shading))
@@ -110,11 +109,30 @@ struct GameModel{//}<CardContent> {
         return cards
     }
     
-    func isMatched() -> Bool {
-        let matchColor = true
-        let matchNumber = true
-        let matchShape = true
-        let matchShading = true
-        return matchColor && matchNumber && matchShape && matchShading
+    
+    
+    func isSame<T:Equatable>(one: T, two: T, three: T) -> Bool {
+        one == two && two == three
+    }
+    
+    func isDistinct<T:Equatable>(one: T, two: T, three: T) -> Bool {
+        one == two && two == three
+    }
+    
+    
+    func isMatched(card1: Card, card2:Card, card3:Card) -> Bool {
+        let colorMatch =
+            isSame(one: card1.color, two: card2.color, three: card3.color) ||
+            isDistinct(one: card1.color, two: card2.color, three: card3.color)
+        let numberMatch =
+            isSame(one: card1.number, two: card2.number, three: card3.number) ||
+            isDistinct(one: card1.number, two: card2.number, three: card3.number)
+        let shapeMatch =
+            isSame(one: card1.shape, two: card2.shape, three: card3.shape) ||
+            isDistinct(one: card1.shape, two: card2.shape, three: card3.shape)
+        let shadingMatch =
+            isSame(one: card1.shading, two: card2.shading, three: card3.shading) ||
+            isDistinct(one: card1.shading, two: card2.shading, three: card3.shading)
+      return colorMatch && numberMatch && shapeMatch && shadingMatch
     }
 }
