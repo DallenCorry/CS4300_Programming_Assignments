@@ -4,7 +4,6 @@
 //  This is the View file for the assignment 3 of CS 4300
 //  Created by Dallen Corry on 2/14/22.
 //
-
 import SwiftUI
 
 struct ContentView: View {
@@ -22,35 +21,98 @@ struct ContentView: View {
             })
 //                .foregroundColor(.purple)
             Spacer ()
-            let shape = RoundedRectangle(cornerRadius: 10)
-                shape.fill(Color.red)
-                .frame(width: 50, height: 50)
-                .onTapGesture {
-                    print("That tickles!")
-                }
-            
-            Text ("Game!")
-            
+            HStack{
+                Text("Draw 3 Cards")
+                    .onTapGesture {
+                        print("That tickles!")
+                    }
+                let shape = RoundedRectangle(cornerRadius: 10)
+                    shape.fill(Color.red)
+                    .frame(width: 60, height: 90)
+                    .onTapGesture {
+                        print("That tickles!")
+                    }
+            }
+//            Spacer()
+            Button("New Game"){
+                print("I work")
+            }
         }
-        
     }
 }
 
 
-struct CardView: View {
+struct CardView: View {//<SomeShape: Shape>
     let card: GameModel.Card
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: 5)
             shape.fill().foregroundColor(.white)
             shape.stroke(lineWidth: 3)
-            Text(card.content)
+            
+            HStack {
+                //for loop here putting in several shapes?? using the card.shape??
+                getTheCardsBody(for: card)
+//                Diamond(startingPosition: CGPoint(x:30,y:40), size: 10)
+//                    .foregroundColor(getColor(card: card))
+//                    .opacity(getShading(card: card))
+            }
+
             //here is where I will need to change from a text to my shape, I think.
             //but it probably should still be card.content, or something similar. Just not Text().
-                .font(.footnote)
-                .foregroundColor(Color.green)
+
+                
+        }
+        .foregroundColor(Color.blue)//card.color?? Selected??
+    }
+    
+    func getTheCardsBody (for card:GameModel.Card) -> some View {
+        var shapeArray: [AnyView] = [AnyView]()
+        for i in 0..<getNumber(card: card) {
+            shapeArray.append(AnyView(Diamond(startingPosition: CGPoint(x:(10*(i+1)),y:40), size: 10)))
+        }
+        return VStack {
+            shapeArray[0]
+            Text(String(shapeArray.count))
+            
+        }
+        .foregroundColor(getColor(card: card))
+    }
+    
+    func getColor(card: GameModel.Card) -> Color {
+        switch card.color {
+        case GameModel.myColor.Green: return .green
+        case GameModel.myColor.Purple : return .purple
+        case GameModel.myColor.Orange : return .orange
+//        default: return .green
         }
     }
+    func getNumber(card: GameModel.Card) -> Int {
+        switch card.number {
+        case GameModel.Number.One: return 1
+        case GameModel.Number.Two : return 2
+        case GameModel.Number.Three : return 3
+        }
+    }
+//    func getShape(card: GameModel.Card) -> some View {
+//        switch card.shape {
+//        case GameModel.myShape.Rectangle: return RoundedRectangle(cornerRadius: 1)
+//        case GameModel.myShape.Diamond : return Diamond(startingPosition: CGPoint(x:30,y:40), size: 10)
+//        case GameModel.myShape.Oval : return Circle()
+//        }
+//    }
+    func getShading(card: GameModel.Card) -> Double {
+        switch card.shading {
+        case GameModel.Shading.Open: return 0.1
+        case GameModel.Shading.Stripes: return 0.3
+        case GameModel.Shading.Solid: return 1.0
+        }
+    }
+    
+    
+    
+    
+    
     
 //    var body: some View {
 //        GeometryReader(content: { geometry in
@@ -103,7 +165,6 @@ struct CardView: View {
 //[ ] 6. Indicate if match or not. Cards must look different than just normal, and than just selected
 //[ ] 7. Support "deselection" (only if 1 or 2 cards selected
 //[ ] 8. On a match: replace 3 cards with 3 new ones. adjust view when there are no more cards to draw,
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = SetGame()
