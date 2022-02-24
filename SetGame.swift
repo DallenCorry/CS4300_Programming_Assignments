@@ -5,7 +5,6 @@
 //  View model
 //  Created by Dallen Corry on 2/14/22.
 //
-
 import SwiftUI
 
 class SetGame: ObservableObject {
@@ -22,5 +21,9 @@ class SetGame: ObservableObject {
     
     init() {
         model = Self.createModel()
+    }
+    
+    var theBodyOfTheCard: some View {
+        return Text("AHH")
     }
 }
