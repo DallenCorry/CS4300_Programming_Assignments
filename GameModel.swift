@@ -7,34 +7,38 @@
 //said that here we should have animation for the dealing>
 import Foundation
 
-struct GameModel{//}<CardContent> {
+struct GameModel{
     let cardsArray: Array<Card>
     var cardsOnScreen: Array<Card>
-    var numberOfCardsOnScreen = 12
-    var points: Int = 0
+    var numberOfCardsOnScreen: Int
+    var points: Int = 0 //EC
     
     init () {
+        numberOfCardsOnScreen = 12
         cardsArray = Self.makeCards()
         cardsOnScreen = Array(cardsArray.shuffled().prefix(numberOfCardsOnScreen))
     }
     
-    init (cardsArray: [Card]) {
-        self.cardsArray = cardsArray
-        cardsOnScreen = cardsArray.shuffled()
-    }
-    
-//    init (myArrayForTesting: [String]) {
-//        self.myArrayForTesting = myArrayForTesting
-//        cardsArray = Array<Card>()
-//        points = 0
+//    init (numberOfCardsOnScreen: Int) {
+//        self.numberOfCardsOnScreen = numberOfCardsOnScreen
+//        cardsArray = Self.makeCards()
+//        let tempArray = cardsArray.shuffled()
+//        cardsOnScreen = Array(tempArray.prefix(numberOfCardsOnScreen))
 //    }
     
+    init (cardsArray: [Card], numberOfCardsOnScreen: Int) {
+        self.numberOfCardsOnScreen = numberOfCardsOnScreen
+        self.cardsArray = cardsArray
+        cardsOnScreen = Array(cardsArray.prefix(numberOfCardsOnScreen))
+        print(numberOfCardsOnScreen)
+    }
+
     struct Card: Identifiable {
         let id: Int
-        var isFaceUp = false
+        var isFaceUp = false//NOT NEEDED
         var isMatched = false
-        var seenBefore = false
-        let content: String//CardContent //use generics (line 11)
+        var isSelected = false
+        let content: String//CardContent //use generics (line 11) NOT NEEDED
         //4 attributes with 3 states each. Try using an enum?
         var color: myColor
         var number: Number
@@ -134,5 +138,17 @@ struct GameModel{//}<CardContent> {
             isSame(one: card1.shading, two: card2.shading, three: card3.shading) ||
             isDistinct(one: card1.shading, two: card2.shading, three: card3.shading)
       return colorMatch && numberMatch && shapeMatch && shadingMatch
+    }
+    
+    mutating func chooseCard(_ card:Card) {
+        if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id}) {
+            cardsOnScreen[chosenIndex].isSelected.toggle()
+            print(card.number, card.shading, card.color, card.shape)
+        }
+    }
+    
+    mutating func addCards() {
+//        numberOfCardsOnScreen += 3
+//        cardsOnScreen.shuffle()
     }
 }
