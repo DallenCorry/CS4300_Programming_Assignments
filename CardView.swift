@@ -26,24 +26,32 @@ struct CardView: View {
         let amountOfShapes = getNumber(card: card)
         switch card.shape{
         case GameModel.myShape.Diamond:
-            let diamond = Diamond()
-            diamond.aspectRatio(2, contentMode: .fit)
-
             for _ in 0..<amountOfShapes {
-                shapeArray.append(AnyView(Diamond()
-                    //getShading(card: card)==0.9 ? diamond.stroke(getColor(card: card)) : Diamond()
-//                        .stroke(getShading(card: card)==0.9 ? getColor(card: card) : .brown)
-//                        .foregroundColor(getColor(card: card))
+                shapeArray.append(AnyView(
+                    Diamond()
                         .aspectRatio(2, contentMode: .fit)
-                    
+                        .opacity(getShading(card: card))
+                        .overlay(Diamond().stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
                 ))
             }
         case GameModel.myShape.Rectangle:
             for _ in 0..<amountOfShapes {
-                shapeArray.append(AnyView(RoundedRectangle(cornerRadius: 5).aspectRatio(2, contentMode: .fit)))
+                shapeArray.append(AnyView(
+                    RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+                        .aspectRatio(2, contentMode: .fit)
+                        .opacity(getShading(card: card))
+                        .overlay(RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
+                ))
+                        
             }
         case GameModel.myShape.Oval:
-            for _ in 0..<amountOfShapes { shapeArray.append(AnyView(Ellipse().aspectRatio(2, contentMode: .fit)))
+            for _ in 0..<amountOfShapes {
+                shapeArray.append(AnyView(
+                    Ellipse()
+                        .aspectRatio(2, contentMode: .fit)
+                        .opacity(getShading(card: card))
+                        .overlay(Ellipse().stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
+                ))
             }
         }
         return VStack{
@@ -58,7 +66,6 @@ struct CardView: View {
                 shapeArray[2]
             }
         }
-        .opacity(getShading(card: card))
         .padding(10)
         .foregroundColor(getColor(card: card))
     }
@@ -79,7 +86,7 @@ struct CardView: View {
     }
     func getShading(card: GameModel.Card) -> Double {
         switch card.shading {
-        case GameModel.Shading.Open: return 0.9
+        case GameModel.Shading.Open: return 0.01
         case GameModel.Shading.Stripes: return 0.45
         case GameModel.Shading.Solid: return 1.0
         }
@@ -114,7 +121,7 @@ struct CardView: View {
 //    }
 //
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 10
+        static let cornerRadius: CGFloat = 5
         static let lineWidth: CGFloat = 3
         static let fontScale: CGFloat = 0.8
     }
