@@ -41,108 +41,14 @@ struct ContentView: View {
     }
 }
 
+//struct DiamondForEachable: Identifiable {
+//    let id = UUID()
+//    static func diamonds(with count: Int) -> [DiamondForEachable] {
+//        .init(repeating: .init(), count: count)
+//    }
+//}
 
-struct CardView: View {//<SomeShape: Shape>
-    let card: GameModel.Card
-    var body: some View {
-        ZStack {
-            let shape = RoundedRectangle(cornerRadius: 5)
-            shape.fill().foregroundColor(.white)
-            shape.stroke(lineWidth: 3)
-            
-            HStack {
-                //for loop here putting in several shapes?? using the card.shape??
-                getTheCardsBody(for: card)
-//                Diamond(startingPosition: CGPoint(x:30,y:40), size: 10)
-//                    .foregroundColor(getColor(card: card))
-//                    .opacity(getShading(card: card))
-            }
 
-            //here is where I will need to change from a text to my shape, I think.
-            //but it probably should still be card.content, or something similar. Just not Text().
-
-                
-        }
-        .foregroundColor(Color.blue)//card.color?? Selected??
-    }
-    
-    func getTheCardsBody (for card:GameModel.Card) -> some View {
-        var shapeArray: [AnyView] = [AnyView]()
-        for i in 0..<getNumber(card: card) {
-            shapeArray.append(AnyView(Diamond(startingPosition: CGPoint(x:(10*(i+1)),y:40), size: 10)))
-        }
-        return VStack {
-            shapeArray[0]
-            Text(String(shapeArray.count))
-            
-        }
-        .foregroundColor(getColor(card: card))
-    }
-    
-    func getColor(card: GameModel.Card) -> Color {
-        switch card.color {
-        case GameModel.myColor.Green: return .green
-        case GameModel.myColor.Purple : return .purple
-        case GameModel.myColor.Orange : return .orange
-//        default: return .green
-        }
-    }
-    func getNumber(card: GameModel.Card) -> Int {
-        switch card.number {
-        case GameModel.Number.One: return 1
-        case GameModel.Number.Two : return 2
-        case GameModel.Number.Three : return 3
-        }
-    }
-//    func getShape(card: GameModel.Card) -> some View {
-//        switch card.shape {
-//        case GameModel.myShape.Rectangle: return RoundedRectangle(cornerRadius: 1)
-//        case GameModel.myShape.Diamond : return Diamond(startingPosition: CGPoint(x:30,y:40), size: 10)
-//        case GameModel.myShape.Oval : return Circle()
-//        }
-//    }
-    func getShading(card: GameModel.Card) -> Double {
-        switch card.shading {
-        case GameModel.Shading.Open: return 0.1
-        case GameModel.Shading.Stripes: return 0.3
-        case GameModel.Shading.Solid: return 1.0
-        }
-    }
-    
-    
-    
-    
-    
-    
-//    var body: some View {
-//        GeometryReader(content: { geometry in
-//            ZStack{
-//                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-//                if card.isFaceUp {
-//                    shape.fill().foregroundColor(.white)
-//                    shape.stroke(lineWidth: DrawingConstants.lineWidth)
-//                    Text(card.content).font(font(in: geometry.size))
-//                } else if card.isMatched {
-//                    //WILL NEED TO REMOVE 3 CARDS AND ADD 3 NEW ONES
-//                    shape.opacity(0)
-//                }
-//                else {
-//                    shape.fill()
-//                }
-//            }
-//        })
-////
-//    }
-//    private func font(in size: CGSize) -> Font {
-//        .system(size: min(size.width, size.height)*DrawingConstants.fontScale)
-//    }
-//
-//    private struct DrawingConstants {
-//        static let cornerRadius: CGFloat = 10
-//        static let lineWidth: CGFloat = 3
-//        static let fontScale: CGFloat = 0.8
-//    }
-}
 
 
 
