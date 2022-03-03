@@ -23,6 +23,7 @@ class SetGame: ObservableObject {
         model = Self.createModel()
     }
     
+    //unused
     var theBodyOfTheCard: some View {
         return Text("AHH")
     }
