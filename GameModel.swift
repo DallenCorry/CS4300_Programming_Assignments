@@ -4,7 +4,7 @@
 //
 //  Model for Assignment three in CS 4300
 //  Created by Dallen Corry on 2/14/22.
-//
+//said that here we should have animation for the dealing>
 import Foundation
 
 struct GameModel{//}<CardContent> {
@@ -116,7 +116,7 @@ struct GameModel{//}<CardContent> {
     }
     
     func isDistinct<T:Equatable>(one: T, two: T, three: T) -> Bool {
-        one == two && two == three
+        one != two && one != three && two != three
     }
     
     
