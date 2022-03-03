@@ -12,13 +12,18 @@ struct CardView: View {
     var body: some View {
         ZStack {
             //Card
-            let shape = RoundedRectangle(cornerRadius: 5)
+            let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             shape.fill().foregroundColor(.white)
-            shape.stroke(lineWidth: 3)
+            if(card.isSelected){
+                shape.stroke(.yellow, lineWidth: DrawingConstants.lineWidth)
+            }else {
+                shape.stroke(.blue, lineWidth: DrawingConstants.lineWidth)
+            }
             //body of the card
             getTheCardsBody(of: card)
         }
-        .foregroundColor(.blue)//card.color?? Selected??
+        
+//        .foregroundColor(.blue)//card.color?? Selected??
     }
     
     func getTheCardsBody (of card:GameModel.Card) -> some View {
@@ -31,7 +36,7 @@ struct CardView: View {
                     Diamond()
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(Diamond().stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
+                        .overlay(Diamond().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
                 ))
             }
         case GameModel.myShape.Rectangle:
@@ -40,7 +45,7 @@ struct CardView: View {
                     RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
+                        .overlay(RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
                 ))
                         
             }
@@ -50,7 +55,7 @@ struct CardView: View {
                     Ellipse()
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(Ellipse().stroke(getColor(card: card), lineWidth: 3).frame(width: nil, height: nil))
+                        .overlay(Ellipse().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
                 ))
             }
         }
@@ -91,35 +96,7 @@ struct CardView: View {
         case GameModel.Shading.Solid: return 1.0
         }
     }
-    
-    
-    
-    
-    
-    
-//    var body: some View {
-//        GeometryReader(content: { geometry in
-//            ZStack{
-//                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-//                if card.isFaceUp {
-//                    shape.fill().foregroundColor(.white)
-//                    shape.stroke(lineWidth: DrawingConstants.lineWidth)
-//                    Text(card.content).font(font(in: geometry.size))
-//                } else if card.isMatched {
-//                    //WILL NEED TO REMOVE 3 CARDS AND ADD 3 NEW ONES
-//                    shape.opacity(0)
-//                }
-//                else {
-//                    shape.fill()
-//                }
-//            }
-//        })
-////
-//    }
-//    private func font(in size: CGSize) -> Font {
-//        .system(size: min(size.width, size.height)*DrawingConstants.fontScale)
-//    }
-//
+
     private struct DrawingConstants {
         static let cornerRadius: CGFloat = 5
         static let lineWidth: CGFloat = 3
