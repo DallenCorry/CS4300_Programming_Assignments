@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct Diamond: Shape {
-    var startingPosition: CGPoint
-    var size: CGFloat
+   
     
     func path(in rect: CGRect) -> Path {
-//        let center = CGPoint(x: rect.midX, y:rect.midY)
-//        let radius = min(rect.width, rect.height)/2
-//        let start = CGPoint(
-//            x:  center.x+radius * CGFloat(cos(starAngle.radians)),
-//            y:center.x+radius * CGFloat(sin(starAngle.radians))
-//        )
+
+        let sizeX = rect.size.width/4
+        let sizeY = rect.size.height/4
+
+        let center = CGPoint(x: rect.midX, y:rect.midY-sizeY)
+
         var p = Path()
-        p.move(to: startingPosition)
+        p.move(to: center)
         p.addLine(to: CGPoint(
-            x:startingPosition.x-size,
-            y:startingPosition.y+(size*2)))
+            x:center.x-sizeX*2,
+            y:center.y+sizeY))
         p.addLine(to: CGPoint(
-            x:startingPosition.x,
-            y:startingPosition.y+(size*4)))
+            x:center.x,
+            y:center.y+(sizeY*2)))
         p.addLine(to: CGPoint(
-            x:startingPosition.x+size,
-            y:startingPosition.y+(size*2)))
+            x:center.x+sizeX*2,
+            y:center.y+(sizeY)))
         p.closeSubpath()
+
         return p
     }
 }
