@@ -15,15 +15,21 @@ struct CardView: View {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
             shape.fill().foregroundColor(.white)
             if(card.isSelected){
-                shape.stroke(.yellow, lineWidth: DrawingConstants.lineWidth)
+                if card.threeCardsSelected {
+                    if card.isMatched {
+                        shape.stroke(.green, lineWidth: DrawingConstants.lineWidth)
+                    } else {
+                        shape.stroke(.red, lineWidth: DrawingConstants.lineWidth)
+                    }
+                } else {
+                    shape.stroke(.yellow, lineWidth: DrawingConstants.lineWidth)
+                }
             }else {
                 shape.stroke(.blue, lineWidth: DrawingConstants.lineWidth)
             }
             //body of the card
             getTheCardsBody(of: card)
         }
-        
-//        .foregroundColor(.blue)//card.color?? Selected??
     }
     
     func getTheCardsBody (of card:GameModel.Card) -> some View {
@@ -39,13 +45,13 @@ struct CardView: View {
                         .overlay(Diamond().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
                 ))
             }
-        case GameModel.myShape.Rectangle:
+        case GameModel.myShape.Squiggle:
             for _ in 0..<amountOfShapes {
                 shapeArray.append(AnyView(
-                    RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+                    Squiggle()//cornerRadius: DrawingConstants.cornerRadius)
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius).stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
+                        .overlay(Squiggle().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
                 ))
                         
             }
@@ -55,7 +61,7 @@ struct CardView: View {
                     Ellipse()
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(Ellipse().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth).frame(width: nil, height: nil))
+                        .overlay(Ellipse().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth))
                 ))
             }
         }
