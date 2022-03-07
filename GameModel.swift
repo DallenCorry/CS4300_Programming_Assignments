@@ -10,6 +10,7 @@ import Foundation
 struct GameModel{
     let cardsArray: Array<Card>
     var cardsOnScreen: Array<Card>
+    var selectedCards: Array<Card> = [Card]()
     var numberOfCardsOnScreen: Int
     var points: Int = 0 //EC
     
@@ -38,8 +39,8 @@ struct GameModel{
         var isFaceUp = false//NOT NEEDED
         var isMatched = false
         var isSelected = false
+        var threeCardsSelected = false
         let content: String//CardContent //use generics (line 11) NOT NEEDED
-        //4 attributes with 3 states each. Try using an enum?
         var color: myColor
         var number: Number
         var shape: myShape
@@ -54,7 +55,7 @@ struct GameModel{
             shading = Shading.Open
         }
         
-        init(id: Int, content: String/*CardContent*/, color:myColor, number: Number, shape:myShape, shading: Shading) {
+        init(id: Int, content: String, color:myColor, number: Number, shape:myShape, shading: Shading) {
             self.id = id
             self.content = content
             self.color = color
@@ -77,15 +78,9 @@ struct GameModel{
     }
     
     enum myShape: CaseIterable {
-        case Rectangle
+        case Squiggle
         case Diamond
         case Oval
-        
-//        func allSame (_ arr: [myShape]) {
-//            if arr[0] == arr[1] && arr[0] == arr[2] {
-//
-//            }
-//        }
     }
     
     enum Shading: CaseIterable {
@@ -98,7 +93,6 @@ struct GameModel{
     static func makeCards() -> [Card]{
         var cards = [Card]()
         var myId :Int = 0
-//        let myContent: CardContent
         myColor.allCases.forEach({ color in
             Number.allCases.forEach({ number in
                 myShape.allCases.forEach({ shape in
@@ -109,22 +103,21 @@ struct GameModel{
                 })
             })
         })
-//        print(cards)
         return cards
     }
     
     
     
-    func isSame<T:Equatable>(one: T, two: T, three: T) -> Bool {
-        one == two && two == three
+    private static func isSame<T:Equatable>(one: T, two: T, three: T) -> Bool {
+        one == two && one == three
     }
     
-    func isDistinct<T:Equatable>(one: T, two: T, three: T) -> Bool {
+    private static func isDistinct<T:Equatable>(one: T, two: T, three: T) -> Bool {
         one != two && one != three && two != three
     }
     
     
-    func isMatched(card1: Card, card2:Card, card3:Card) -> Bool {
+    static func areMatched(card1: Card, card2:Card, card3:Card) -> Bool {
         let colorMatch =
             isSame(one: card1.color, two: card2.color, three: card3.color) ||
             isDistinct(one: card1.color, two: card2.color, three: card3.color)
@@ -140,10 +133,85 @@ struct GameModel{
       return colorMatch && numberMatch && shapeMatch && shadingMatch
     }
     
+    /*
+     These if statements are all out of order and repeated. Fix These later
+     */
     mutating func chooseCard(_ card:Card) {
-        if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id}) {
-            cardsOnScreen[chosenIndex].isSelected.toggle()
-            print(card.number, card.shading, card.color, card.shape)
+        if !card.isSelected {
+            if selectedCards.count < 3 {
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    if !card.isMatched {
+                        cardsOnScreen[chosenIndex].isSelected.toggle()
+                        print(card.number, card.shading, card.color, card.shape)
+                        if selectedCards.count == 2 {
+                            print("Earlier",selectedCards[0].isMatched)
+                            //this makes it different, because we are sure we are selecting and not deselecting
+                            
+                            print("Something happened here...", GameModel.areMatched(card1: selectedCards[0], card2: selectedCards[1], card3: cardsOnScreen[chosenIndex]))
+                            selectedCards.indices.forEach { selectedCards[$0].isMatched = GameModel.areMatched(card1: selectedCards[0], card2: selectedCards[1], card3: cardsOnScreen[chosenIndex])
+                                selectedCards[$0].threeCardsSelected = true
+                            }
+                            //bad coding here
+                            cardsOnScreen[chosenIndex].threeCardsSelected = true
+                            print("Mid",selectedCards[0].isMatched)
+                        }
+                        selectedCards.append(cardsOnScreen[chosenIndex])
+                    }
+                }
+                print("later",selectedCards[0].isMatched)
+            } else {
+                //deselect all cards
+//                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    let tempbool = GameModel.areMatched(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2])
+                    if (tempbool) {
+                        print("IT'S WORKING!!!")
+                    }
+                    else {
+                        print ("no match")
+                    }
+//                    selectedCards.indices.forEach {selectedCards[$0].isMatched = tempbool
+//                        selectedCards[$0].threeCardsSelected = true
+//                        print("thing",selectedCards[$0].threeCardsSelected ,tempbool)}
+//                }
+                cardsOnScreen.indices.forEach { cardsOnScreen[$0].isSelected = false }
+                selectedCards.removeAll()
+                //select chosen index
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    if !card.isMatched {
+                        cardsOnScreen[chosenIndex].isSelected = true
+                        selectedCards.append(cardsOnScreen[chosenIndex])
+                    }
+                }
+            }
+        } else {
+            if selectedCards.count < 3 {
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    cardsOnScreen[chosenIndex].isSelected.toggle()
+                    if let selectedIndex = selectedCards.firstIndex(where: { $0.id == cardsOnScreen[chosenIndex].id }) {
+                        selectedCards.remove(at: selectedIndex)
+                    }
+                }
+            } else {
+                //deselect all cards
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    var tempbool = GameModel.areMatched(card1: selectedCards[0], card2: selectedCards[1], card3: selectedCards[2])
+                    if (tempbool) {
+                        print("IT'S WORKING!!!")
+                    }
+                    else {
+                        print ("no match")
+                    }
+                }
+                cardsOnScreen.indices.forEach { cardsOnScreen[$0].isSelected = false }
+                selectedCards.removeAll()
+                //select chosen index
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    if !card.isMatched {
+                        cardsOnScreen[chosenIndex].isSelected = true
+                        selectedCards.append(cardsOnScreen[chosenIndex])
+                    }
+                }
+            }
         }
     }
     
