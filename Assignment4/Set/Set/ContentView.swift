@@ -21,6 +21,7 @@ struct ContentView: View {
            }
             .padding(.horizontal)
             newGame
+            shuffle
                 .padding(10)
         }
     }
@@ -38,9 +39,10 @@ struct ContentView: View {
     }
     
     var discardPile: some View {
-        RoundedRectangle(cornerRadius: 10)
+        RoundedRectangle(cornerRadius: 5)
             .cardify(isSelected: false, threeCardsSelected: false, isMatched: false)
             .frame(width: 45, height: 65, alignment: .bottom)
+            .foregroundColor(.white)
     }
     
     var drawPile: some View {
@@ -48,7 +50,7 @@ struct ContentView: View {
             .foregroundColor(.blue)
             .onTapGesture {
                 withAnimation{
-                    game.addCards()
+                    game.addCards(3)
                 }
             }
     }
@@ -57,6 +59,13 @@ struct ContentView: View {
         Button("New Game") {
             withAnimation{
                 game.newGame()
+            }
+        }
+    }
+    var shuffle:some View {
+        Button("Shuffle") {
+            withAnimation{
+                game.myShuffle()
             }
         }
     }
@@ -74,13 +83,14 @@ struct ContentView: View {
 //[ ] 8.  Animate dealing the cards
 //[ ] 9.  Dealing 3 more cards when a match is on the board should replace those cards. (3 fly to board and 3 fly to discard at same time)
 //[ ] 10. Cards should resize/change position, and be animated while doing so.
-//[ ] 11. Animate when a match occurs
-//[ ] 12. Animate when a Mismatch occurs (must be different than a match)
+        //[X] 11. Animate when a match occurs
+        //[X] 12. Animate when a Mismatch occurs (must be different than a match)
  
 
  struct ContentView_Previews: PreviewProvider {
      static var previews: some View {
         let game = SetGame()
         ContentView(game: game)
+.previewInterfaceOrientation(.portrait)
     }
 }

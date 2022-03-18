@@ -11,9 +11,10 @@ struct CardView: View {
     let card: GameModel.Card
     var body: some View {
             getTheCardsBody(of: card)
-            .rotationEffect(Angle.degrees(card.isMatched ? 360: 0))
-//            .rotation3DEffect(Angle.degrees(card.threeCardsSelected ? 0: 180), axis: (x: 0, y: 1, z: 0))
-//            .scaleEffect(card.isMatched ? CGSize(width: 1.25, height: 1.25):CGSize(width: 1, height: 1))
+            .rotationEffect(Angle.degrees(card.isMatched&&card.threeCardsSelected ? 360: 0))
+//            .rotationEffect(Angle.degrees(!card.isMatched&&card.threeCardsSelected ? 36: 0))
+//            .rotation3DEffect(Angle.degrees(!card.isMatched&&card.threeCardsSelected ? 360: 0), axis: (x: 0, y: 1, z: 0))
+            .scaleEffect(!card.isMatched&&card.threeCardsSelected ? CGSize(width: 1, height: 0.55):CGSize(width: 1, height: 1))
 //            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true))
         .cardify(isSelected: card.isSelected, threeCardsSelected: card.threeCardsSelected, isMatched: card.isMatched)
     }

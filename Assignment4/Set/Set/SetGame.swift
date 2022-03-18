@@ -27,11 +27,15 @@ class SetGame: ObservableObject {
         model.chooseCard(card)
     }
     
-    func addCards() {
-            model.addCards()
+    func addCards(_ num:Int) {
+            model.addCardsToScreen(num)
         }
 
     func newGame() {
         model = Self.createModel()
+    }
+    
+    func myShuffle() {
+        model.myShuffle()
     }
 }
