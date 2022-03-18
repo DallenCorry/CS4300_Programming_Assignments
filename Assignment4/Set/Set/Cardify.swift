@@ -28,6 +28,7 @@ struct Cardify: ViewModifier {
             shape.fill().foregroundColor(.white)
             content
         }
+//        .rotation3DEffect(Angle.degrees(isMatched ? 0 : 180), axis: (0,1,0))//works
     }
     
     private struct DrawingConstants {

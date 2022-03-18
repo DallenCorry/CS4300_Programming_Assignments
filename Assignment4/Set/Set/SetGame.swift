@@ -15,6 +15,10 @@ class SetGame: ObservableObject {
         model.cardsOnScreen
     }
     
+    var discardPile: [GameModel.Card] {
+        model.discardedCards
+    }
+    
     private static func createModel() -> GameModel {
         return GameModel()
     }

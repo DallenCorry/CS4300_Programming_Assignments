@@ -10,16 +10,13 @@ import SwiftUI
 struct CardView: View {
     let card: GameModel.Card
     var body: some View {
-            getTheCardsBody(of: card)
+        getTheCardBody(of: card)
+            .scaleEffect( CGSize(width: 1, height: !card.isMatched&&card.threeCardsSelected ?0.55: 1))
+            .cardify(isSelected: card.isSelected, threeCardsSelected: card.threeCardsSelected, isMatched: card.isMatched)
             .rotationEffect(Angle.degrees(card.isMatched&&card.threeCardsSelected ? 360: 0))
-//            .rotationEffect(Angle.degrees(!card.isMatched&&card.threeCardsSelected ? 36: 0))
-//            .rotation3DEffect(Angle.degrees(!card.isMatched&&card.threeCardsSelected ? 360: 0), axis: (x: 0, y: 1, z: 0))
-            .scaleEffect(!card.isMatched&&card.threeCardsSelected ? CGSize(width: 1, height: 0.55):CGSize(width: 1, height: 1))
-//            .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true))
-        .cardify(isSelected: card.isSelected, threeCardsSelected: card.threeCardsSelected, isMatched: card.isMatched)
     }
     
-    func getTheCardsBody (of card:GameModel.Card) -> some View {
+    func getTheCardBody (of card:GameModel.Card) -> some View {
         var shapeArray: [AnyView] = [AnyView]()
         let amountOfShapes = getNumber(card: card)
         switch card.shape{
@@ -38,10 +35,8 @@ struct CardView: View {
                     Squiggle()//EXTRA CREDIT
                         .aspectRatio(2, contentMode: .fit)
                         .opacity(getShading(card: card))
-                        .overlay(
-                            Squiggle().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth))
+                        .overlay(Squiggle().stroke(getColor(card: card), lineWidth: DrawingConstants.lineWidth))
                 ))
-                        
             }
         case GameModel.myShape.Oval:
             for _ in 0..<amountOfShapes {

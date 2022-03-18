@@ -16,7 +16,7 @@ struct GameModel {
     
     init () {
         initialNumberOfCardsOnScreen = 12
-        undeltCards = Self.makeCards()//.shuffled()
+        undeltCards = Self.makeCards().shuffled()
         cardsOnScreen = [Card]()
         addCardsToScreen(initialNumberOfCardsOnScreen)
     }
@@ -104,57 +104,47 @@ struct GameModel {
 
     mutating func addCardsToScreen(_ num:Int) {
         if undeltCards.count >= 3 {
-            for _ in 0..<num {
-                cardsOnScreen.append(undeltCards[0])
-                undeltCards.remove(at:0)
-            }
+//            if selectedCards.count != 3 {//non functional (replaces 3 matched cards with the deck button)
+                for _ in 0..<num {
+                    cardsOnScreen.append(undeltCards[0])
+                    undeltCards.remove(at:0)
+                }
+//            } else {
+//                replaceCards(num, replace: true)
+//                selectedCards.removeAll()
+//            }
         } else {
             print("no cards remaining")
         }
     }
     
     mutating func replaceCards(_ num:Int, replace:Bool) {
-//        var matchIndex = [Int]()
-//        cardsOnScreen.indices.forEach {
-//            if cardsOnScreen[$0].isMatched {
-//                matchIndex.append($0)
-//            }
-//        }
-        if replace {
-//            //this works but is janky (also won't work once cards are out)
-//            cardsOnScreen[matchIndex[0]] = undeltCards[0]
-//            undeltCards.remove(at:0)
-//            cardsOnScreen[matchIndex[1]] = undeltCards[0]
-//            undeltCards.remove(at:0)
-//            cardsOnScreen[matchIndex[2]] = undeltCards[0]
-//            undeltCards.remove(at:0)
-//            matchIndex.removeAll()
-        } else {
-//            cardsOnScreen.remove(at: matchIndex[0])
-//            cardsOnScreen.remove(at: matchIndex[1])
-//            cardsOnScreen.remove(at: matchIndex[2])
-//            matchIndex.removeAll()
+        for _ in 0..<num {
             if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.isMatched}) {
-                cardsOnScreen.remove(at: chosenIndex)
+                if replace {
+                    discardedCards.append(cardsOnScreen[chosenIndex])
+                    cardsOnScreen[chosenIndex] = undeltCards[0]
+                    undeltCards.remove(at:0)
+                } else {
+                    print("deleting")
+                    discardedCards.append(cardsOnScreen[chosenIndex])
+                    cardsOnScreen.remove(at: chosenIndex)
+                }
             }
-
         }
     }
     
     mutating func remove3Matched() {
-        //remove the 3 from screen, and add 3 more in their place.
-        if cardsOnScreen.count > 12 {
-            //remove the 3 matched and do nothing else (should put them back into a grid, no holes)
-            replaceCards(3, replace: false)
-        } else {
-            //replace the 3 cards
-            replaceCards(3, replace: true)
-        }
+        //remove the 3 from screen, and add 3 more if there are less than 12 cards and at least 3 cards in the deck
+        let myBool = (cardsOnScreen.count <= 12 && undeltCards.count >= 3)
+        print(myBool,cardsOnScreen.count," ",undeltCards.count)
+        replaceCards(3,replace:myBool)
+        
         //reset all onscreen matches and selections
         cardsOnScreen.indices.forEach { cardsOnScreen[$0].isSelected = false; cardsOnScreen[$0].threeCardsSelected = false; cardsOnScreen[$0].isMatched = false}
-        
-        
         selectedCards.removeAll()
+        
+        //win condition: no cards left
         if undeltCards.count == 0 && cardsOnScreen.count == 0 {
             print ("You won!")
         }
@@ -183,19 +173,11 @@ struct GameModel {
                     selectedCards.append(cardsOnScreen[chosenIndex])
                 }
             } else {
-                //remove the 3 matched cards
-//                let tempArray = cardsOnScreen
-//                var matchedArray = [Card]()
-//                cardsOnScreen.removeAll()
-//                tempArray.indices.forEach {
-//                    if !tempArray[$0].isMatched {
-//                        cardsOnScreen.append(tempArray[$0])
-//                    } else {
-//                        matchedArray.append(tempArray[$0])
-//                    }
-//                }
-                //remove Cards from main array
                 remove3Matched()
+                if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
+                    cardsOnScreen[chosenIndex].isSelected = true
+                    selectedCards.append(cardsOnScreen[chosenIndex])
+                }
             }
         } else
         if card.isSelected {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5347493D27E42E870027771B /* CardBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5347493C27E42E870027771B /* CardBack.swift */; };
 		534A2F2D27E28C5F00665798 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534A2F2C27E28C5F00665798 /* Cardify.swift */; };
 		537EF58727C9A6D800447472 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537EF58627C9A6D800447472 /* CardView.swift */; };
 		53A85E0327C6AFE900602061 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A85E0227C6AFE900602061 /* Diamond.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5347493C27E42E870027771B /* CardBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardBack.swift; sourceTree = "<group>"; };
 		534A2F2C27E28C5F00665798 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		537EF58627C9A6D800447472 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		53A85E0227C6AFE900602061 /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 				53C81E5B27BB18D30047C72F /* AspectVGrid.swift */,
 				53C81E4927BB15BB0047C72F /* SetApp.swift */,
 				53C81E4B27BB15BB0047C72F /* ContentView.swift */,
+				5347493C27E42E870027771B /* CardBack.swift */,
 				537EF58627C9A6D800447472 /* CardView.swift */,
 				534A2F2C27E28C5F00665798 /* Cardify.swift */,
 				53A85E0227C6AFE900602061 /* Diamond.swift */,
@@ -166,6 +169,7 @@
 				53C81E4A27BB15BB0047C72F /* SetApp.swift in Sources */,
 				53C81E5A27BB16970047C72F /* SetGame.swift in Sources */,
 				53C81E5C27BB18D30047C72F /* AspectVGrid.swift in Sources */,
+				5347493D27E42E870027771B /* CardBack.swift in Sources */,
 				53C81E5827BB166E0047C72F /* GameModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
