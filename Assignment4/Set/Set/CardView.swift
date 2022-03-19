@@ -10,10 +10,10 @@ import SwiftUI
 struct CardView: View {
     let card: GameModel.Card
     var body: some View {
-        getTheCardBody(of: card)
-            .scaleEffect( CGSize(width: 1, height: !card.isMatched&&card.threeCardsSelected ?0.55: 1))
-            .cardify(isSelected: card.isSelected, threeCardsSelected: card.threeCardsSelected, isMatched: card.isMatched)
-            .rotationEffect(Angle.degrees(card.isMatched&&card.threeCardsSelected ? 360: 0))
+            getTheCardBody(of: card)
+                .scaleEffect( CGSize(width: 1, height: !card.isMatched&&card.threeCardsSelected ?0.55: 1))
+                .cardify(isSelected: card.isSelected, threeCardsSelected: card.threeCardsSelected, isMatched: card.isMatched, isFaceUp: card.isFaceUp)
+                .rotationEffect(Angle.degrees(card.isMatched&&card.threeCardsSelected ? 360: 0))
     }
     
     func getTheCardBody (of card:GameModel.Card) -> some View {
@@ -49,7 +49,6 @@ struct CardView: View {
             }
         }
         return VStack{
-            //struct has a view and id, then can use foreach
             if shapeArray.count > 0 {
                 shapeArray[0]
             }

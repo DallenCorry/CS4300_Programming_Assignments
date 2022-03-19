@@ -9,22 +9,26 @@ import SwiftUI
 
 class SetGame: ObservableObject {
     var tempBool = false
-    @Published var model = createModel()
+    @Published var model = createModel(0)
     
     var cards: Array<GameModel.Card> {
         model.cardsOnScreen
+    }
+    
+    var undeltCards: [GameModel.Card] {
+        model.undeltCards
     }
     
     var discardPile: [GameModel.Card] {
         model.discardedCards
     }
     
-    private static func createModel() -> GameModel {
-        return GameModel()
+    private static func createModel(_ num:Int) -> GameModel {
+        return GameModel(initialNumberOfCardsOnScreen:num)
     }
     
     init() {
-        model = Self.createModel()
+        model = Self.createModel(0)
     }
     
     func chooseCard(_ card: GameModel.Card) {
@@ -32,11 +36,12 @@ class SetGame: ObservableObject {
     }
     
     func addCards(_ num:Int) {
-            model.addCardsToScreen(num)
+            model.addCardsFromTheDeckButton(num)
         }
 
     func newGame() {
-        model = Self.createModel()
+        model.clearAllCards()
+        model = Self.createModel(12)
     }
     
     func myShuffle() {

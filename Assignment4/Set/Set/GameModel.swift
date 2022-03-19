@@ -15,14 +15,22 @@ struct GameModel {
     static var cheating = false
     
     init () {
-        initialNumberOfCardsOnScreen = 12
+        self.init(initialNumberOfCardsOnScreen: 0)
+    }
+    
+    init (initialNumberOfCardsOnScreen num:Int) {
+        initialNumberOfCardsOnScreen = num
         undeltCards = Self.makeCards().shuffled()
         cardsOnScreen = [Card]()
+        discardedCards = [Card]()
+        selectedCards = [Card]()
         addCardsToScreen(initialNumberOfCardsOnScreen)
     }
 
     struct Card: Identifiable {
         let id: Int
+        let rotation = Double.random(in: -10...15)
+        var isFaceUp = false
         var isMatched = false
         var isSelected = false
         var threeCardsSelected = false
@@ -72,6 +80,12 @@ struct GameModel {
         return cards
     }
     
+    mutating func clearAllCards() {
+        discardedCards = [Card]()
+        cardsOnScreen = [Card]()
+        selectedCards = [Card]()
+        undeltCards = []
+    }
     
     private static func isSame<T:Equatable>(one: T, two: T, three: T) -> Bool {
         one == two && one == three
@@ -84,6 +98,7 @@ struct GameModel {
     static func areMatched(card1: Card, card2:Card, card3:Card) -> Bool {
         if cheating {
             //for testing purposes only!
+            print("WARNING!! You are in developer mode! change GameModel line 15 to false to play")
             return true
         } else {
             let colorMatch =
@@ -101,18 +116,23 @@ struct GameModel {
             return colorMatch && numberMatch && shapeMatch && shadingMatch
         }
     }
+    
+    mutating func addCardsFromTheDeckButton(_ num:Int) {
+            if let _ = cardsOnScreen.firstIndex(where: { $0.isMatched}) {
+                replaceCards(num, replace: true)
+                selectedCards.removeAll()
+            } else {
+                addCardsToScreen(num)
+            }
+    }
 
     mutating func addCardsToScreen(_ num:Int) {
-        if undeltCards.count >= 3 {
-//            if selectedCards.count != 3 {//non functional (replaces 3 matched cards with the deck button)
-                for _ in 0..<num {
-                    cardsOnScreen.append(undeltCards[0])
-                    undeltCards.remove(at:0)
-                }
-//            } else {
-//                replaceCards(num, replace: true)
-//                selectedCards.removeAll()
-//            }
+        if undeltCards.count > 0 {
+            for _ in 0..<num {
+                cardsOnScreen.append(undeltCards[0])
+                cardsOnScreen[cardsOnScreen.count-1].isFaceUp = true
+                undeltCards.remove(at:0)
+            }
         } else {
             print("no cards remaining")
         }
@@ -124,9 +144,9 @@ struct GameModel {
                 if replace {
                     discardedCards.append(cardsOnScreen[chosenIndex])
                     cardsOnScreen[chosenIndex] = undeltCards[0]
+                    cardsOnScreen[chosenIndex].isFaceUp = true
                     undeltCards.remove(at:0)
                 } else {
-                    print("deleting")
                     discardedCards.append(cardsOnScreen[chosenIndex])
                     cardsOnScreen.remove(at: chosenIndex)
                 }
@@ -136,9 +156,8 @@ struct GameModel {
     
     mutating func remove3Matched() {
         //remove the 3 from screen, and add 3 more if there are less than 12 cards and at least 3 cards in the deck
-        let myBool = (cardsOnScreen.count <= 12 && undeltCards.count >= 3)
-        print(myBool,cardsOnScreen.count," ",undeltCards.count)
-        replaceCards(3,replace:myBool)
+//        let myBool = (cardsOnScreen.count <= 12 && undeltCards.count >= 3)
+        replaceCards(3,replace:false)
         
         //reset all onscreen matches and selections
         cardsOnScreen.indices.forEach { cardsOnScreen[$0].isSelected = false; cardsOnScreen[$0].threeCardsSelected = false; cardsOnScreen[$0].isMatched = false}
@@ -154,10 +173,6 @@ struct GameModel {
         cardsOnScreen.shuffle()
     }
     
-    //I need to see if i can refactor this AGAIN. Need the selecting to be correct
-    //When 3 mathed, selecting a matched one should do nothing
-    //when 3 matched, selecting non matcched should select it and remove3 (Was working before I commented out the seleted.removeAll, line 171)
-    //when remove3, should go to discard, and automatically bring in 3 new cards FROM DRAW PILE
     mutating func chooseCard(_ card:Card) {
         if selectedCards.count == 3 {
             //check the match
@@ -173,6 +188,7 @@ struct GameModel {
                     selectedCards.append(cardsOnScreen[chosenIndex])
                 }
             } else {
+                //remove matched cards
                 remove3Matched()
                 if let chosenIndex = cardsOnScreen.firstIndex(where: { $0.id == card.id }) {
                     cardsOnScreen[chosenIndex].isSelected = true
