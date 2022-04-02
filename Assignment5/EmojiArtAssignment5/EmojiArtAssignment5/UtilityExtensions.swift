@@ -20,7 +20,18 @@ extension Collection where Element: Identifiable {
     func index(matching element: Element) -> Self.Index? {
         firstIndex(where: { $0.id == element.id })
     }
+    func myContains(_ element:Element) -> Bool {
+        for ind in self {
+            if ind.id == element.id {
+                print("IT IS IN THE LIST")
+                return true
+            }
+        }
+        return false
+    }
 }
+
+//contains, to check if it is still in the set, and then
 
 // we could do the same thing when it comes to removing an element
 // but we have to add that to a different protocol
