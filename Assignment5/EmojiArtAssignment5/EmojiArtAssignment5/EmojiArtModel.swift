@@ -19,6 +19,7 @@ struct EmojiArtModel {
         var size: Int
         let id: Int
         var isSelected = false
+
         
         fileprivate init(text: String, x: Int, y: Int, size: Int, id: Int) {
             self.text = text

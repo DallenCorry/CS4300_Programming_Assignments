@@ -2,6 +2,7 @@
 //  EmojiArtModel.Background.swift
 //  EmojiArt
 //
+//  Background object
 //  Created by Dallen Corry on 3/28/22.
 //
 

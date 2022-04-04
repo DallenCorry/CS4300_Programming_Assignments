@@ -71,8 +71,7 @@ class EmojiArtDocument: ObservableObject {
     
     func selectEmoji(_ emoji:EmojiArtModel.Emoji) {
         if selectedEmojis.myContains(emoji) {
-            print("Already Selected")
-            selectedEmojis.remove(emoji)
+                selectedEmojis.remove(at: selectedEmojis.index(matching: emoji)!)
         } else {
             selectedEmojis.insert(emoji)
         }
@@ -98,24 +97,25 @@ class EmojiArtDocument: ObservableObject {
         }
     }
     
-    func moveSelectedEmojis(_ emojiSet: Set<EmojiArtModel.Emoji>, by offset: CGSize) {
-//        if let index = emojiArt.emojis.index(matching: emoji) {
-//            emojiArt.emojis[index].x += Int(offset.width)
-//            emojiArt.emojis[index].y += Int(offset.height)
-//        }
-        for emoji in emojiSet {
+    func moveSelectedEmojis(by offset: CGSize) {
+        for emoji in selectedEmojis {
             moveEmoji(emoji, by: offset)
         }
-        print("move multiple emojis")
     }
     
-    func isSelected(emoji: EmojiArtModel.Emoji) -> Bool {
+    func isSelected(_ emoji: EmojiArtModel.Emoji) -> Bool {
         return selectedEmojis.myContains(emoji)
     }
     
     func scaleEmoji(_ emoji: EmojiArtModel.Emoji, by scale: CGFloat) {
         if let index = emojiArt.emojis.index(matching: emoji) {
             emojiArt.emojis[index].size = Int((CGFloat(emojiArt.emojis[index].size) * scale).rounded(.toNearestOrAwayFromZero))
+        }
+    }
+    
+    func scaleSelectedEmojis (by scale: CGFloat) {
+        for emoji in selectedEmojis {
+            scaleEmoji(emoji, by: scale)
         }
     }
 }
