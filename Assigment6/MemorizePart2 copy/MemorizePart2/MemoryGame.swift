@@ -17,6 +17,16 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
         set { cards.indices.forEach { cards[$0].isFaceUp = ( $0 == newValue) } }
     }
     
+    func allAreMatched() -> Bool {
+        var matched = true
+        for card in cards {
+            if !card.isMatched {
+                matched = false
+            }
+        }
+        return matched
+    }
+    
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id}),
            !cards[chosenIndex].isFaceUp,

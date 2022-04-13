@@ -75,6 +75,9 @@ class EmojiMemoryGame: ObservableObject {
     
     func choose(_ card: Card) {
         model.choose(card)
+        if model.allAreMatched() {
+            print("You Win!")
+        }
     }
     
     func newGame() {

@@ -12,39 +12,43 @@ struct EmojiMemoryGameView: View {
     @Namespace private var dealingNamespace
     
     var body: some View {
-        ZStack {
-            //top bar
-//            RoundedRectangle(cornerRadius:5)
-//                .fill().foregroundColor(.black)
-//                .frame(height: 50.0)
-//            HStack{
-//                Text(game.theme.name)
-//                    .font(.largeTitle)
-//                    .foregroundColor(.white)
-//                    .padding(5)
-//                Spacer()
-//                Text("Points: " + String(game.points))
-//                    .font(.title)
-//                    .foregroundColor(.white)
-//                    .padding(5)
-//            }
-        //main body
         VStack {
-            gameBody
-            .foregroundColor(game.color)
-            //bottom buttons
-            HStack {
-                Button ("Shuffle"){
-                    withAnimation(.easeInOut) {
-                        game.shuffle()
+            //top bar
+            ZStack {
+                RoundedRectangle(cornerRadius:5)
+                    .fill().foregroundColor(.black)
+                    .frame(height: 50.0)
+                HStack{
+                    Text(game.theme.name)
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .padding(5)
+                    Spacer()
+                    Text("Points: " + String(game.points))
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding(5)
+                }
+            }
+            ZStack {
+            //main body
+                VStack {
+                    gameBody
+                    .foregroundColor(game.color)
+                    //bottom buttons
+                    HStack {
+                        Button ("Shuffle"){
+                            withAnimation(.easeInOut) {
+                                game.shuffle()
+                            }
+                         }
+                        Spacer()
+                        newGameButton
                     }
-                 }
-                Spacer()
-                newGameButton
+                }
+                deckBody
             }
         }
-        deckBody
-    }
         .padding(.horizontal)
     }
     
@@ -97,7 +101,7 @@ struct EmojiMemoryGameView: View {
 //                    }
             }
         })
-            .foregroundColor(CardConstants.color)
+//            .foregroundColor(CardConstants.color)
     }
     
     var deckBody: some View {
@@ -110,7 +114,7 @@ struct EmojiMemoryGameView: View {
             }
         }
         .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
-        .foregroundColor(CardConstants.color)
+        .foregroundColor(game.color)
         .onTapGesture {
             for card in game.cards {
                 withAnimation {
@@ -170,7 +174,7 @@ struct CardView: View {
                     .opacity(0.5)
                 Text(card.content)
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false))
+                    .animation(Animation.linear(duration: 1))
                     .padding(5)
                     .font(Font.system(size: DrawingConstants.fontSize))
                     .scaleEffect(scale(thatFits: geometry.size))
