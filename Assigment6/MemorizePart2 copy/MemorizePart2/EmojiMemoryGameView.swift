@@ -13,46 +13,18 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         VStack {
-            //top bar
+            header
             ZStack {
-                RoundedRectangle(cornerRadius:5)
-                    .fill().foregroundColor(.black)
-                    .frame(height: 50.0)
-                HStack{
-                    Text(game.theme.name)
-                        .font(.largeTitle)
-                        .foregroundColor(.white)
-                        .padding(5)
-                    Spacer()
-                    Text("Points: " + String(game.points))
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding(5)
-                }
-            }
-            ZStack {
-            //main body
-                VStack {
-                    gameBody
-                    .foregroundColor(game.color)
-                    //bottom buttons
-                    HStack {
-                        Button ("Shuffle"){
-                            withAnimation(.easeInOut) {
-                                game.shuffle()
-                            }
-                         }
-                        Spacer()
-                        newGameButton
-                    }
-                }
+                gameBody
                 deckBody
             }
+            .foregroundColor(game.color)
+            footer
         }
         .padding(.horizontal)
     }
     
-    //dealing animation
+    //MARK: - Dealing
     @State private var dealt = Set<Int>()
     private func deal(_ card: EmojiMemoryGame.Card){
         dealt.insert(card.id)
@@ -74,6 +46,26 @@ struct EmojiMemoryGameView: View {
         -Double(game.cards.firstIndex(where: { $0.id == card.id }) ?? 0)
     }
 
+    //MARK: Views
+    var header: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius:5)
+                .fill().foregroundColor(.black)
+                .frame(height: 50.0)
+            HStack{
+                Text(game.theme.name)
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .padding(5)
+                Spacer()
+                Text("Points: " + String(game.points))
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding(5)
+            }
+        }
+    }
+    
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3, content: { card in
             if isUndealt(card) || card.isMatched && !card.isFaceUp{
@@ -90,18 +82,8 @@ struct EmojiMemoryGameView: View {
                             game.choose(card)
                         }
                     }
-                //my stuff from before
-//                    .padding(4)
-//                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
-//                    .onTapGesture {
-//                        //the user's intent
-//                        withAnimation(.easeInOut) {
-//                            game.choose(card)
-//                        }
-//                    }
             }
         })
-//            .foregroundColor(CardConstants.color)
     }
     
     var deckBody: some View {
@@ -123,7 +105,18 @@ struct EmojiMemoryGameView: View {
             }
         }
     }
-   
+    
+    var footer: some View {
+        HStack {
+            Button ("Shuffle"){
+                withAnimation(.easeInOut) {
+                    game.shuffle()
+                }
+             }
+            Spacer()
+            newGameButton
+        }
+    }
     
     var newGameButton: some View {
         Button {
@@ -149,6 +142,7 @@ struct EmojiMemoryGameView: View {
         
 }
 
+//MARK: CardView
 struct CardView: View {
     let card: MemoryGame<String>.Card
     
@@ -182,21 +176,7 @@ struct CardView: View {
             .cardify(isFaceUp: card.isFaceUp)
         }
     }
-//    var body: some View {
-//        GeometryReader { geometry in
-//            ZStack{
-//                    Pie(startAngle: Angle(degrees: -90), endAngle: Angle(degrees: 120-90))
-//                        .padding(5)
-//                        .opacity(0.5)
-//                    Text(card.content)
-//                        .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
-//                        .animation(Animation.easeInOut(duration: 1))
-//                        .font(Font.system(size: DrawingConstants.fontSize))
-//                        .scaleEffect(scale(thatFits: geometry.size))
-//                }
-//                .modifier(Cardify(isFaceUp: card.isFaceUp))
-//            }
-//        }
+    
     private func scale(thatFits size: CGSize) -> CGFloat {
         min(size.width, size.height)/(DrawingConstants.fontSize/DrawingConstants.fontScale)
     }
@@ -210,29 +190,23 @@ struct CardView: View {
 }
 
 
-//TODO: -
-//add a theme.
-//Themes have a name, a set of emojis, a number of pairs of cards, and a color for the cards
-    //enums will be important
-    //need at least 6 themes
-    //maybe make another file/thing that is a Theme (this is what I would do, if it were OOP. Just make a new class. So can I make a new struct? (if so probs make a new file)
-//Add a new Theme with a single line of code ( a constructor could do that...)
-        // 1. [X] get it working
-        // 2. [X] Remove other buttons
-        // 3. [X] Make Themes
-        // 4. [X] Make 1 theme with fewer pairs
-        // 5. [X] use a random part of the emojis
-        // 6. [X] allow no duplicate pairs
-// 7. [?] automatically set number of cards lower if there aren't enough emojis.
-        // 8. [X] at least 6 themes
-        // 9. [X] add themes with a single line of code
-        //10. [X] add New Game button
-        //11. [X] randomly choose theme when creating new game
-        //12. [X] start with cards all Face Down
-        //13. [X] Cards should be shuffled
-        //14. [X] Display the Theme's name
-        //15. [X] Keep Score in the game
-        //16. [X] Display the score
+//MARK: TODO
+//[ ] 1.  No random theme
+//[ ] 2.  Changing theme restarts game
+//[ ] 3.  Show a theme chooser on launch
+//[ ] 4.  Use a List for themes
+//[ ] 5.  Each row of List shows name of theme, color of theme, # of cards in theme, and some emojis of the theme
+//[ ] 6.  Tapping on theme in the List Navigates to playing a game with that theme.
+//[ ] 7.  Name of theme should be on screen while playing, keep same as score, new game, etc.
+//[ ] 8.  From Chooser back to game should keep same game going. (not restart)
+//[ ] 9.  UI to Add new Theme to the List in Chooser
+//[ ] 10. Chooser must have Edit mode. Tapping brings up editor, instead of playing game with theme
+//[ ] 11. Use a Form
+//[ ] 12. User edit name, emojis, number of cards and color in theme
+//[ ] 13. PERSISTANT Themes
+//[ ] 14. Work on both Iphone and Ipad
+//[ ] 15. Work on a physical device
+
 
 
 
@@ -241,8 +215,5 @@ struct ContentView_Previews: PreviewProvider {
         let game = EmojiMemoryGame()
         game.choose(game.cards.first!)
         return EmojiMemoryGameView(game: game)
-//            .preferredColorScheme(.dark)
-//        EmojiMemoryGameView(game: game)
-//            .preferredColorScheme(.light)
     }
 }
